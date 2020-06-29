@@ -4,7 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm"
+import { Review } from "./Review"
+import { Movie } from "./Movie"
 
 @Entity()
 export class User {
@@ -27,4 +32,16 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: string
+
+  //Relations
+  @OneToMany((type) => Review, (review) => review.user)
+  reviews: Review[]
+
+  @ManyToMany((type) => Movie, (movie) => movie.watchedByUsers)
+  @JoinTable()
+  movieWatchedList: Movie[]
+
+  @ManyToMany((type) => Movie, (movie) => movie.wishedByUsers)
+  @JoinTable()
+  movieWishList: Movie[]
 }
