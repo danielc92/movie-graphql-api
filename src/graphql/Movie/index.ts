@@ -95,3 +95,19 @@ export const MovieInputType = new GraphQLInputObjectType({
     }
   },
 })
+
+export const MoviePatchType = new GraphQLInputObjectType({
+  name: "MoviePatch",
+  description: "Used to update existing movies.",
+  fields: () => {
+    return {
+      movieTitle: { type: GraphQLString },
+      movieReleaseDate: { type: GraphQLString },
+      movieGenre: { type: MovieGenreEnumType },
+      movieType: { type: MovieTypeEnumType },
+      movieImageUrl: { type: GraphQLString },
+      movieDurationMins: { type: GraphQLInt },
+      movieHasBluray: { type: GraphQLBoolean },
+    }
+  },
+})
