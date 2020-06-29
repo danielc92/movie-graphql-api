@@ -11,7 +11,7 @@ import { getManager } from "typeorm"
 import { Dummy } from "../entity/Dummy"
 import { Movie } from "../entity/Movie"
 import { DummyType, DummyPatchType } from "./Dummy"
-import { MovieType, MovieInputType } from "./Movie"
+import { MovieType, MovieInputType, MoviePatchType } from "./Movie"
 import { CountryType, CountryInputType } from "./Country"
 import { Country } from "../entity/Country"
 import { DirectorType, DirectorInputType } from "./Director"
@@ -154,6 +154,24 @@ const RootMutation = new GraphQLObjectType({
         })
 
         const result = getManager().save(record)
+        return result
+      },
+    },
+
+    updateMovie: {
+      type: MovieType,
+      description: "Update an existing Movie.",
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        patch: { type: MoviePatchType },
+      },
+      resolve: async (parent, args) => {
+        let record = await getManager().getRepository(Movie).findOne(args.id)
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = await getManager().save(record)
         return result
       },
     },
