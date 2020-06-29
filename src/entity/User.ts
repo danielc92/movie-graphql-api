@@ -16,14 +16,10 @@ export class User {
 
   @Column()
   password: string
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   firstName: string
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   lastName: string
 
   @CreateDateColumn()
