@@ -4,7 +4,18 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  ManyToMany,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
 } from "typeorm"
+import { Review } from "./Review"
+import { Award } from "./Award"
+import { Actor } from "./Actor"
+import { Director } from "./Director"
+import { Country } from "./Country"
+import { User } from "./User"
 
 export enum MovieTypeEnum {
   TV_SERIES = "TV series",
@@ -13,6 +24,8 @@ export enum MovieTypeEnum {
 }
 export enum MovieGenreEnum {
   HORROR = "Horror",
+  ADVENTURE = "Adventure",
+  DRAMA = "Drama",
   THRILLER = "Thriller",
   COMEDY = "Comedy",
   ROMANCE = "Romance",
@@ -59,4 +72,30 @@ export class Movie {
 
   @UpdateDateColumn()
   updatedAt: string
+
+  //Relations
+
+  @ManyToOne((type) => Country, (country) => country.movies)
+  country: Country
+
+  @OneToMany((type) => Review, (review) => review.user)
+  reviews: Review[]
+
+  @ManyToMany((type) => Award, (award) => award.movies)
+  @JoinTable()
+  awards: Award[]
+
+  @ManyToMany((type) => Actor, (actor) => actor.movies)
+  @JoinTable()
+  actors: Actor[]
+
+  @ManyToMany((type) => Director, (director) => director.movies)
+  @JoinTable()
+  directors: Director[]
+
+  @ManyToMany((type) => User, (user) => user.movieWatchedList)
+  watchedByUsers: User[]
+
+  @ManyToMany((type) => User, (user) => user.movieWishList)
+  wishedByUsers: User[]
 }
