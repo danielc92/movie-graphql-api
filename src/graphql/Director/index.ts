@@ -8,7 +8,7 @@ import {
 } from "graphql"
 
 export const DirectorType = new GraphQLObjectType({
-  name: "DirectorType",
+  name: "Director",
   description: "A director type.",
   fields: () => {
     return {
