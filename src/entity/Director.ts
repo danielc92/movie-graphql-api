@@ -4,7 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  ManyToMany,
 } from "typeorm"
+import { Country } from "./Country"
+import { Movie } from "./Movie"
 
 @Entity()
 export class Director {
@@ -20,11 +24,17 @@ export class Director {
   @Column({ nullable: true })
   directorDob: Date
 
-  //country
-
   @CreateDateColumn()
   createdAt: string
 
   @UpdateDateColumn()
   updatedAt: string
+
+  //Relations
+
+  @ManyToMany((type) => Movie, (movie) => movie.directors)
+  movies: Movie[]
+
+  @ManyToOne((type) => Country, (country) => country.directors)
+  country: Country
 }
