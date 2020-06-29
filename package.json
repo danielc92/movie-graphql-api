@@ -27,6 +27,7 @@
     "db-kill": "docker kill pg-movies && docker rm pg-movies",
     "db-start": "docker run --name pg-movies -p 5432:5432 -e POSTGRES_DB=movies -e POSTGRES_PASSWORD=secret -d postgres",
     "db-restart": "docker restart pg-movies",
-    "db-console": "docker exec -it pg-movies psql -U postgres -d movies"
+    "db-console": "docker exec -it pg-movies psql -U postgres -d movies",
+    "codegen": "get-graphql-schema http://localhost:3040/graphql > schema.graphql"
   }
 }
