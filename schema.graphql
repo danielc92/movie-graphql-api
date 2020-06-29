@@ -1,0 +1,168 @@
+schema {
+  query: queries
+  mutation: mutations
+}
+
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+"""A actor type."""
+type Actor {
+  id: Int
+  actorFirstName: String
+  actorLastName: String
+  actorDob: String
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""An actor input type."""
+input ActorInputType {
+  actorFirstName: String!
+  actorLastName: String!
+  actorDob: String
+}
+
+"""An award associated with movies"""
+type Award {
+  id: Int
+  awardName: String
+  awardYear: Int
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""Used to create a new Award"""
+input AwardInput {
+  awardName: String!
+  awardYear: Int!
+}
+
+"""A country type."""
+type Country {
+  id: Int
+  countryName: String
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""A country input type."""
+input CountryInputType {
+  countryName: String!
+}
+
+"""A director type."""
+type Director {
+  id: Int
+  directorFirstName: String
+  directorLastName: String
+  directorDob: String
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""An  director input type."""
+input DirectorInputType {
+  directorFirstName: String!
+  directorLastName: String!
+  directorDob: String
+}
+
+"""Movie type"""
+type Movie {
+  id: Int
+  movieTitle: String
+  movieReleaseDate: String
+  movieGenre: MovieGenreEnum
+  movieType: MovieTypeEnum
+  movieImageUrl: String
+  movieDurationMins: Int
+  movieHasBluray: Boolean
+
+  """An auto generated timestamp, upon creation."""
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""Possible values for movie genre."""
+enum MovieGenreEnum {
+  HORROR
+  ADVENTURE
+  DRAMA
+  THRILLER
+  COMEDY
+  ROMANCE
+  DOCUMENTARY
+  ACTION
+  OTHER
+}
+
+"""Used to insert new movies."""
+input MovieInput {
+  movieTitle: String!
+  movieReleaseDate: String!
+  movieGenre: MovieGenreEnum!
+  movieType: MovieTypeEnum!
+  movieImageUrl: String
+  movieDurationMins: Int
+  movieHasBluray: Boolean
+}
+
+"""Possible values for movie type."""
+enum MovieTypeEnum {
+  TV_SERIES
+  MOVIE
+  OTHER
+}
+
+"""The root mutation."""
+type mutations {
+  """Create a new Movie."""
+  createMovie(patch: MovieInput): Movie
+
+  """Create a new Actor."""
+  createActor(patch: ActorInputType): Actor
+
+  """Create a new Director."""
+  createDirector(patch: DirectorInputType): Director
+
+  """Create a new Country."""
+  createCountry(patch: CountryInputType): Country
+
+  """Create a new User."""
+  createUser(patch: UserInput): User
+
+  """Create a new Award."""
+  createAward(patch: AwardInput): Award
+}
+
+"""The root query."""
+type queries {
+  movies: [Movie]
+  actors: [Actor]
+  directors: [Director]
+  countries: [Country]
+  users: [User]
+  awards: [Award]
+}
+
+"""A user"""
+type User {
+  id: Int
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""Used to create new users"""
+input UserInput {
+  email: String!
+  password: String!
+}
+
