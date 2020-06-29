@@ -5,74 +5,75 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLFloat,
-  GraphQLInputObjectType,
-  GraphQLError,
 } from "graphql"
 import { getManager } from "typeorm"
 import { Dummy } from "../entity/Dummy"
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity"
-
-const DummyType = new GraphQLObjectType({
-  name: "Dummy",
-  description: "A dummy type for testing purposes.",
-  fields: () => {
-    return {
-      id: {
-        type: GraphQLInt,
-      },
-      text: {
-        type: GraphQLString,
-      },
-      nullableText: {
-        type: GraphQLString,
-      },
-      createdAt: {
-        type: GraphQLFloat,
-      },
-      modifiedAt: {
-        type: GraphQLFloat,
-      },
-    }
-  },
-})
-
-const DummyPatchType = new GraphQLInputObjectType({
-  name: "DummyPatch",
-  description: "A dummy patch type for testing purposes.",
-  fields: () => {
-    return {
-      text: {
-        type: new GraphQLNonNull(GraphQLString),
-      },
-      nullableText: {
-        type: GraphQLString,
-      },
-    }
-  },
-})
+import { Movie } from "../entity/Movie"
+import { DummyType, DummyPatchType } from "./Dummy"
+import { MovieType, MovieInputType } from "./Movie"
+import { CountryType, CountryInputType } from "./Country"
+import { Country } from "../entity/Country"
+import { DirectorType, DirectorInputType } from "./Director"
+import { Director } from "../entity/Director"
+import { ActorType, ActorInputType } from "./Actor"
+import { Actor } from "../entity/Actor"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
   name: "queries",
   fields: {
-    dummy: {
-      type: DummyType,
-      args: {
-        id: { type: GraphQLInt },
-      },
+    // dummy: {
+    //   type: DummyType,
+    //   args: {
+    //     id: { type: GraphQLInt },
+    //   },
+    //   resolve: async (parent, args) => {
+    //     const repo = getManager().getRepository(Dummy)
+    //     const data = await repo.findOne(args.id)
+    //     return data
+    //   },
+    // },
+    // dummies: {
+    //   type: new GraphQLList(DummyType),
+    //   args: {},
+    //   resolve: async (parent, args) => {
+    //     const repo = getManager().getRepository(Dummy)
+    //     const data = await repo.find()
+    //     return data
+    //   },
+    // },
+    movies: {
+      type: new GraphQLList(MovieType),
+      args: {},
       resolve: async (parent, args) => {
-        const repo = getManager().getRepository(Dummy)
-        const data = await repo.findOne(args.id)
+        const data = await getManager().getRepository(Movie).find()
         return data
       },
     },
-    dummies: {
-      type: new GraphQLList(DummyType),
+
+    actors: {
+      type: new GraphQLList(ActorType),
       args: {},
       resolve: async (parent, args) => {
-        const repo = getManager().getRepository(Dummy)
-        const data = await repo.find()
+        const data = await getManager().getRepository(Actor).find()
+        return data
+      },
+    },
+
+    directors: {
+      type: new GraphQLList(DirectorType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Director).find()
+        return data
+      },
+    },
+
+    countries: {
+      type: new GraphQLList(CountryType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Country).find()
         return data
       },
     },
@@ -83,36 +84,104 @@ const RootMutation = new GraphQLObjectType({
   description: "The root mutation.",
   name: "mutations",
   fields: {
-    addDummy: {
-      description: "Add a dummy to the database.",
-      type: DummyType,
-      args: {
-        text: { type: new GraphQLNonNull(GraphQLInt) },
-        nullableText: { type: GraphQLString },
-      },
-      resolve: async (parent, args) => {
-        let data = new Dummy()
-        data.text = args.text
-        data.nullableText = args.nullableText
-        return await getManager().save(data)
-      },
-    },
-    patchDummy: {
-      type: DummyType,
-      description: "Update an existing dummy to the database.",
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLInt) },
-        patch: { type: DummyPatchType },
-      },
-      resolve: async (parent, args) => {
-        let repo = getManager().getRepository(Dummy)
-        let item = await repo.findOne(args.id)
+    // addDummy: {
+    //   description: "Add a dummy to the database.",
+    //   type: DummyType,
+    //   args: {
+    //     text: { type: new GraphQLNonNull(GraphQLInt) },
+    //     nullableText: { type: GraphQLString },
+    //   },
+    //   resolve: async (parent, args) => {
+    //     let data = new Dummy()
+    //     data.text = args.text
+    //     data.nullableText = args.nullableText
+    //     return await getManager().save(data)
+    //   },
+    // },
+    // patchDummy: {
+    //   type: DummyType,
+    //   description: "Update an existing dummy to the database.",
+    //   args: {
+    //     id: { type: new GraphQLNonNull(GraphQLInt) },
+    //     patch: { type: DummyPatchType },
+    //   },
+    //   resolve: async (parent, args) => {
+    //     let repo = getManager().getRepository(Dummy)
+    //     let item = await repo.findOne(args.id)
 
+    //     Object.entries(args.patch).forEach((x) => {
+    //       item[x[0]] = x[1]
+    //     })
+
+    //     return await getManager().save(item)
+    //   },
+    // },
+
+    createMovie: {
+      type: MovieType,
+      description: "Create a new Movie.",
+      args: {
+        patch: { type: MovieInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Movie()
         Object.entries(args.patch).forEach((x) => {
-          item[x[0]] = x[1]
+          record[x[0]] = x[1]
         })
 
-        return await getManager().save(item)
+        const result = getManager().save(record)
+        return result
+      },
+    },
+
+    createActor: {
+      type: ActorType,
+      description: "Create a new Actor.",
+      args: {
+        patch: { type: ActorInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Actor()
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = getManager().save(record)
+        return result
+      },
+    },
+
+    createDirector: {
+      type: DirectorType,
+      description: "Create a new Director.",
+      args: {
+        patch: { type: DirectorInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Director()
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = getManager().save(record)
+        return result
+      },
+    },
+
+    createCountry: {
+      type: CountryType,
+      description: "Create a new Country.",
+      args: {
+        patch: { type: CountryInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Country()
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = getManager().save(record)
+        return result
       },
     },
   },
