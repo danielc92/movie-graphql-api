@@ -8,7 +8,7 @@ import {
 } from "graphql"
 
 export const ActorType = new GraphQLObjectType({
-  name: "ActorType",
+  name: "Actor",
   description: "A actor type.",
   fields: () => {
     return {
