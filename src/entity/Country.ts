@@ -4,7 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm"
+import { Director } from "./Director"
+import { Actor } from "./Actor"
+import { Movie } from "./Movie"
 
 @Entity()
 export class Country {
@@ -19,4 +23,15 @@ export class Country {
 
   @UpdateDateColumn()
   updatedAt: string
+
+  // Relations
+
+  @OneToMany((type) => Movie, (movie) => movie.country)
+  movies: Movie[]
+
+  @OneToMany((type) => Director, (director) => director.country)
+  directors: Director[]
+
+  @OneToMany((type) => Actor, (actor) => actor.country)
+  actors: Actor[]
 }
