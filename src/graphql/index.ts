@@ -5,6 +5,7 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLError,
 } from "graphql"
 import { getManager } from "typeorm"
 import { Dummy } from "../entity/Dummy"
@@ -17,6 +18,11 @@ import { DirectorType, DirectorInputType } from "./Director"
 import { Director } from "../entity/Director"
 import { ActorType, ActorInputType } from "./Actor"
 import { Actor } from "../entity/Actor"
+import { UserType, UserInputType } from "./User"
+import { User } from "../entity/User"
+import { AwardType, AwardInputType } from "./Award"
+import { Award } from "../entity/Award"
+import * as bcrypt from "bcrypt"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -74,6 +80,24 @@ const RootQuery = new GraphQLObjectType({
       args: {},
       resolve: async (parent, args) => {
         const data = await getManager().getRepository(Country).find()
+        return data
+      },
+    },
+
+    users: {
+      type: new GraphQLList(UserType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(User).find()
+        return data
+      },
+    },
+
+    awards: {
+      type: new GraphQLList(AwardType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Award).find()
         return data
       },
     },
@@ -176,6 +200,40 @@ const RootMutation = new GraphQLObjectType({
       },
       resolve: async (parent, args) => {
         const record = new Country()
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = getManager().save(record)
+        return result
+      },
+    },
+
+    createUser: {
+      type: UserType,
+      description: "Create a new User.",
+      args: {
+        patch: { type: UserInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new User()
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+        record.password = await bcrypt.hash(args.patch.password, 10)
+        const result = getManager().save(record)
+        return result
+      },
+    },
+
+    createAward: {
+      type: AwardType,
+      description: "Create a new Award.",
+      args: {
+        patch: { type: AwardInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Award()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
         })
