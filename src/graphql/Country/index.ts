@@ -8,7 +8,7 @@ import {
 } from "graphql"
 
 export const CountryType = new GraphQLObjectType({
-  name: "CountryType",
+  name: "Country",
   description: "A country type.",
   fields: () => {
     return {
