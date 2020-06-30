@@ -6,6 +6,7 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLError,
+  GraphQLID,
 } from "graphql"
 import { getManager } from "typeorm"
 import { Dummy } from "../entity/Dummy"
@@ -18,7 +19,7 @@ import { DirectorType, DirectorInputType } from "./Director"
 import { Director } from "../entity/Director"
 import { ActorType, ActorInputType } from "./Actor"
 import { Actor } from "../entity/Actor"
-import { UserType, UserInputType } from "./User"
+import { UserType, UserInputType, UserPatchType } from "./User"
 import { User } from "../entity/User"
 import { AwardType, AwardInputType } from "./Award"
 import { Award } from "../entity/Award"
@@ -240,6 +241,24 @@ const RootMutation = new GraphQLObjectType({
         })
         record.password = await bcrypt.hash(args.patch.password, 10)
         const result = getManager().save(record)
+        return result
+      },
+    },
+
+    updateUser: {
+      type: UserType,
+      description: "Update an existing User",
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+        patch: { type: UserPatchType },
+      },
+      resolve: async (parent, args) => {
+        let record = await getManager().getRepository(User).findOne(args.id)
+        Object.entries(args.patch).forEach((x) => {
+          record[x[0]] = x[1]
+        })
+
+        const result = await getManager().save(record)
         return result
       },
     },
