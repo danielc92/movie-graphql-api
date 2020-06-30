@@ -111,6 +111,17 @@ input MovieInput {
   movieHasBluray: Boolean
 }
 
+"""Used to update existing movies."""
+input MoviePatch {
+  movieTitle: String
+  movieReleaseDate: String
+  movieGenre: MovieGenreEnum
+  movieType: MovieTypeEnum
+  movieImageUrl: String
+  movieDurationMins: Int
+  movieHasBluray: Boolean
+}
+
 """Possible values for movie type."""
 enum MovieTypeEnum {
   TV_SERIES
@@ -123,6 +134,9 @@ type mutations {
   """Create a new Movie."""
   createMovie(patch: MovieInput): Movie
 
+  """Update an existing Movie."""
+  updateMovie(id: Int!, patch: MoviePatch): Movie
+
   """Create a new Actor."""
   createActor(patch: ActorInputType): Actor
 
@@ -134,6 +148,9 @@ type mutations {
 
   """Create a new User."""
   createUser(patch: UserInput): User
+
+  """Update an existing User"""
+  updateUser(userId: ID!, patch: UserPatch): User
 
   """Create a new Award."""
   createAward(patch: AwardInput): Award
@@ -164,5 +181,15 @@ type User {
 input UserInput {
   email: String!
   password: String!
+}
+
+"""A type to aid updating a User type."""
+input UserPatch {
+  email: String
+  password: String
+  firstName: String
+  lastName: String
+  createdAt: Float
+  updatedAt: Float
 }
 
