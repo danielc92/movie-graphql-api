@@ -24,7 +24,7 @@ import { User } from "../entity/User"
 import { AwardType, AwardInputType } from "./Award"
 import { Award } from "../entity/Award"
 import * as bcrypt from "bcrypt"
-import { ReviewType } from "./Review"
+import { ReviewType, ReviewInputType } from "./Review"
 import { Review } from "../entity/Review"
 
 const RootQuery = new GraphQLObjectType({
@@ -153,6 +153,20 @@ const RootMutation = new GraphQLObjectType({
     //   },
     // },
 
+    createReview: {
+      type: ReviewType,
+      description: "Create a new Review.",
+      args: {
+        patch: { type: ReviewInputType },
+      },
+      resolve: async () => {
+        const record = new Review()
+
+        const result = await getManager().save(record)
+        return result
+      },
+    },
+
     createMovie: {
       type: MovieType,
       description: "Create a new Movie.",
@@ -165,7 +179,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
 
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
@@ -200,7 +214,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
 
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
@@ -217,7 +231,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
 
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
@@ -234,7 +248,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
 
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
@@ -251,7 +265,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
         record.password = await bcrypt.hash(args.patch.password, 10)
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
@@ -286,7 +300,7 @@ const RootMutation = new GraphQLObjectType({
           record[x[0]] = x[1]
         })
 
-        const result = getManager().save(record)
+        const result = await getManager().save(record)
         return result
       },
     },
