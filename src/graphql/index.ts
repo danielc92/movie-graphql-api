@@ -55,7 +55,10 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(MovieType),
       args: {},
       resolve: async (parent, args) => {
-        const data = await getManager().getRepository(Movie).find()
+        console.log(parent, args)
+        const data = await getManager()
+          .getRepository(Movie)
+          .find({ relations: ["reviews"] })
         return data
       },
     },
@@ -173,7 +176,7 @@ const RootMutation = new GraphQLObjectType({
         let movie = await getManager()
           .getRepository(Movie)
           .findOne(args.patch.movieId)
-        if (!user) throw new GraphQLError("Movie not found")
+        if (!movie) throw new GraphQLError("Movie not found")
         record.user = user
         record.movie = movie
         record.reviewRating = args.patch.reviewRating

@@ -8,7 +8,9 @@ import {
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLFloat,
+  GraphQLList,
 } from "graphql"
+import { ReviewType } from "../Review"
 
 export const MovieGenreEnumType = new GraphQLEnumType({
   name: "MovieGenreEnum",
@@ -71,6 +73,7 @@ export const MovieType = new GraphQLObjectType({
       movieImageUrl: { type: GraphQLString },
       movieDurationMins: { type: GraphQLInt },
       movieHasBluray: { type: GraphQLBoolean },
+      reviews: { type: new GraphQLList(ReviewType) },
       createdAt: {
         type: GraphQLFloat,
         description: "An auto generated timestamp, upon creation.",
