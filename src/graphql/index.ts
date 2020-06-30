@@ -73,7 +73,11 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(ReviewType),
       args: {},
       resolve: async (parent, args) => {
-        const data = await getManager().getRepository(Review).find()
+        const data = await getManager()
+          .getRepository(Review)
+          .find({
+            relations: ["user", "movie"],
+          })
         return data
       },
     },
@@ -159,9 +163,19 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: ReviewInputType },
       },
-      resolve: async () => {
-        const record = new Review()
+      resolve: async (parent, args) => {
+        let record = new Review()
 
+        let user = await getManager()
+          .getRepository(User)
+          .findOne(args.patch.userId)
+        let movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.patch.movieId)
+        record.user = user
+        record.movie = movie
+        record.reviewRating = args.patch.reviewRating
+        record.reviewText = args.patch.reviewText
         const result = await getManager().save(record)
         return result
       },

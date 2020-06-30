@@ -131,6 +131,9 @@ enum MovieTypeEnum {
 
 """The root mutation."""
 type mutations {
+  """Create a new Review."""
+  createReview(patch: ReviewInput): Review
+
   """Create a new Movie."""
   createMovie(patch: MovieInput): Movie
 
@@ -160,10 +163,30 @@ type mutations {
 type queries {
   movies: [Movie]
   actors: [Actor]
+  reviews: [Review]
   directors: [Director]
   countries: [Country]
   users: [User]
   awards: [Award]
+}
+
+"""Represents a Movie review."""
+type Review {
+  id: Int
+  movie: Movie
+  user: User
+  reviewText: String
+  reviewRating: Int
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""A type to aid with the creation of a Review."""
+input ReviewInput {
+  movieId: Int!
+  userId: Int!
+  reviewText: String!
+  reviewRating: Int!
 }
 
 """A user"""
