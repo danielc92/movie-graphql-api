@@ -23,6 +23,21 @@ export const UserType = new GraphQLObjectType({
   },
 })
 
+export const UserPatchType = new GraphQLInputObjectType({
+  name: "UserPatch",
+  description: "A type to aid updating a User type.",
+  fields: () => {
+    return {
+      email: { type: GraphQLString },
+      password: { type: GraphQLString },
+      firstName: { type: GraphQLString },
+      lastName: { type: GraphQLString },
+      createdAt: { type: GraphQLFloat },
+      updatedAt: { type: GraphQLFloat },
+    }
+  },
+})
+
 export const UserInputType = new GraphQLInputObjectType({
   name: "UserInput",
   description: "Used to create new users",
