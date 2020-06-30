@@ -24,6 +24,8 @@ import { User } from "../entity/User"
 import { AwardType, AwardInputType } from "./Award"
 import { Award } from "../entity/Award"
 import * as bcrypt from "bcrypt"
+import { ReviewType } from "./Review"
+import { Review } from "../entity/Review"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -63,6 +65,15 @@ const RootQuery = new GraphQLObjectType({
       args: {},
       resolve: async (parent, args) => {
         const data = await getManager().getRepository(Actor).find()
+        return data
+      },
+    },
+
+    reviews: {
+      type: new GraphQLList(ReviewType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Review).find()
         return data
       },
     },
