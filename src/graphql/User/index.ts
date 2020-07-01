@@ -5,7 +5,9 @@ import {
   GraphQLString,
   GraphQLInputObjectType,
   GraphQLNonNull,
+  GraphQLList,
 } from "graphql"
+import { MovieType } from "../Movie"
 
 export const UserType = new GraphQLObjectType({
   name: "User",
@@ -19,6 +21,8 @@ export const UserType = new GraphQLObjectType({
       lastName: { type: GraphQLString },
       createdAt: { type: GraphQLFloat },
       updatedAt: { type: GraphQLFloat },
+      movieWatchedList: { type: new GraphQLList(MovieType) },
+      movieWishList: { type: new GraphQLList(MovieType) },
     }
   },
 })
