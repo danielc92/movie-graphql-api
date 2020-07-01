@@ -28,6 +28,8 @@ import { ReviewType, ReviewInputType } from "./Review"
 import { Review } from "../entity/Review"
 import { Soundtrack } from "../entity/Soundtrack"
 import { SoundtrackType, SoundtrackInputType } from "./Soundtrack"
+import { Quote } from "../entity/Quote"
+import { QuoteType } from "./Quote.ts"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -70,6 +72,15 @@ const RootQuery = new GraphQLObjectType({
               "quotes",
             ],
           })
+        return data
+      },
+    },
+    quotes: {
+      description: "Returns a list of Soundtracks.",
+      type: new GraphQLList(QuoteType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Quote).find()
         return data
       },
     },
