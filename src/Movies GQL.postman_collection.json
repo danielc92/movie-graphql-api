@@ -6,58 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "movies",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "graphql",
-					"graphql": {
-						"query": "{\r\n    movies {\r\n        id\r\n        movieTitle\r\n        movieType\r\n        movieDurationMins\r\n        movieGenre\r\n        movieHasBluray\r\n        movieImageUrl\r\n        movieReleaseDate\r\n        updatedAt\r\n        createdAt\r\n        \r\n    }\r\n}",
-						"variables": ""
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3040/graphql",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3040",
-					"path": [
-						"graphql"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "directors",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "graphql",
-					"graphql": {
-						"query": "{\r\n   directors {\r\n       id\r\n       directorDob\r\n       directorFirstName\r\n       directorLastName\r\n       createdAt\r\n       updatedAt\r\n   }\r\n}",
-						"variables": ""
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3040/graphql",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3040",
-					"path": [
-						"graphql"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "actors",
 			"request": {
 				"method": "POST",
@@ -110,14 +58,14 @@
 			"response": []
 		},
 		{
-			"name": "users",
+			"name": "countries",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "{\r\n    users{\r\n        createdAt\r\n        \r\n        email\r\n        firstName\r\n        id\r\n        lastName\r\n        password\r\n        updatedAt\r\n    }\r\n}",
+						"query": "{\r\n   countries {\r\n        id\r\n        countryName\r\n        createdAt\r\n        updatedAt\r\n    }\r\n}",
 						"variables": ""
 					}
 				},
@@ -136,14 +84,92 @@
 			"response": []
 		},
 		{
-			"name": "countries",
+			"name": "directors",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "{\r\n   countries {\r\n        id\r\n        countryName\r\n        createdAt\r\n        updatedAt\r\n    }\r\n}",
+						"query": "{\r\n   directors {\r\n       id\r\n       directorDob\r\n       directorFirstName\r\n       directorLastName\r\n       createdAt\r\n       updatedAt\r\n   }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "movies",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\r\n    movies {\r\n        id\r\n        movieDurationMins\r\n        movieGenre\r\n        movieHasBluray\r\n        movieImageUrl\r\n        movieTitle\r\n        movieReleaseDate\r\n        movieType\r\n        createdAt\r\n        updatedAt\r\n        reviews {\r\n            id\r\n            reviewText\r\n            reviewRating\r\n\r\n        }\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reviews",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\r\n    reviews{\r\n        id\r\n        reviewRating\r\n        reviewText\r\n        user {\r\nfirstName\r\nlastName\r\n        }\r\n        movie {\r\n            movieTitle\r\n        }\r\n        createdAt\r\n        updatedAt\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\r\n    users{\r\n        createdAt\r\n        \r\n        email\r\n        firstName\r\n        id\r\n        lastName\r\n        password\r\n        updatedAt\r\n    }\r\n}",
 						"variables": ""
 					}
 				},
@@ -188,6 +214,58 @@
 			"response": []
 		},
 		{
+			"name": "createAward",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n    createAward (patch: {\r\n        awardName: \"Film of the year award\",\r\n        awardYear: 2005\r\n    }) {\r\n        id\r\n        awardName\r\n        awardYear\r\n        createdAt\r\n        updatedAt\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createCountry",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n   createCountry(patch: {\r\n       countryName: \"United States of America\"\r\n   }) {\r\n       countryName\r\n       id\r\n       createdAt\r\n       updatedAt\r\n   } \r\n\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "createReview",
 			"request": {
 				"method": "POST",
@@ -214,14 +292,40 @@
 			"response": []
 		},
 		{
-			"name": "reviews",
+			"name": "createUser",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "{\r\n    reviews{\r\n        id\r\n        reviewRating\r\n        reviewText\r\n        user {\r\nfirstName\r\nlastName\r\n        }\r\n        createdAt\r\n        updatedAt\r\n    }\r\n}",
+						"query": "mutation {\r\n    createUser(patch: {\r\n        email: \"movie-test-user-1@movie-test-user.com\",\r\n        password: \"123456789\",\r\n        firstName: \"Harry\",\r\n        lastName: \"Smith\"\r\n    }){\r\n        id\r\n        firstName\r\n        lastName\r\n        email\r\n        password\r\n        createdAt\r\n\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createMovie",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n    createActor (\r\n        patch: {\r\n            actorDob: \"1995-1-20\",\r\n            actorFirstName: \"Jack\",\r\n            actorLastName: \"Smith\"\r\n        }\r\n    ) {\r\n        id\r\n        actorFirstName\r\n        actorLastName\r\n    }\r\n}",
 						"variables": ""
 					}
 				},

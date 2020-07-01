@@ -75,7 +75,7 @@ input DirectorInputType {
 type Movie {
   id: Int
   movieTitle: String
-  movieReleaseDate: String
+  movieReleaseDate: Float
   movieGenre: MovieGenreEnum
   movieType: MovieTypeEnum
   movieImageUrl: String
@@ -219,6 +219,8 @@ type User {
 input UserInput {
   email: String!
   password: String!
+  firstName: String
+  lastName: String
 }
 
 """A type to aid updating a User type."""
