@@ -26,6 +26,8 @@ import { Award } from "../entity/Award"
 import * as bcrypt from "bcrypt"
 import { ReviewType, ReviewInputType } from "./Review"
 import { Review } from "../entity/Review"
+import { Soundtrack } from "../entity/Soundtrack"
+import { SoundtrackType, SoundtrackInputType } from "./Soundtrack"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -58,11 +60,29 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (parent, args) => {
         const data = await getManager()
           .getRepository(Movie)
-          .find({ relations: ["reviews", "awards", "directors", "actors"] })
+          .find({
+            relations: [
+              "reviews",
+              "soundtracks",
+              "awards",
+              "directors",
+              "actors",
+              "quotes",
+            ],
+          })
         return data
       },
     },
 
+    soundtracks: {
+      description: "Returns a list of Soundtracks.",
+      type: new GraphQLList(SoundtrackType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager().getRepository(Soundtrack).find()
+        return data
+      },
+    },
     actors: {
       description: "Returns a list of Actors.",
       type: new GraphQLList(ActorType),
@@ -190,6 +210,30 @@ const RootMutation = new GraphQLObjectType({
         record.reviewRating = args.patch.reviewRating
         record.reviewText = args.patch.reviewText
         const result = await getManager().save(record)
+        return result
+      },
+    },
+
+    createSoundtrack: {
+      type: SoundtrackType,
+      description: "Create a single Soundtrack for a Movie",
+      args: {
+        patch: { type: SoundtrackInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Soundtrack()
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.patch.movieId)
+        if (!movie)
+          throw new Error("Movie does not exist, please check movieId")
+
+        record.movie = movie
+        record.soundtrackName = args.patch.soundtrackName
+        record.soundtrackComposedBy = args.patch.soundtrackComposedBy
+
+        const result = await getManager().save(record)
+
         return result
       },
     },
