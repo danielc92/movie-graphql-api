@@ -67,7 +67,7 @@ export const MovieType = new GraphQLObjectType({
     return {
       id: { type: GraphQLInt },
       movieTitle: { type: GraphQLString },
-      movieReleaseDate: { type: GraphQLString },
+      movieReleaseDate: { type: GraphQLFloat },
       movieGenre: { type: MovieGenreEnumType },
       movieType: { type: MovieTypeEnumType },
       movieImageUrl: { type: GraphQLString },
