@@ -55,7 +55,6 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(MovieType),
       args: {},
       resolve: async (parent, args) => {
-        console.log(parent, args)
         const data = await getManager()
           .getRepository(Movie)
           .find({ relations: ["reviews"] })
