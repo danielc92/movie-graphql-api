@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLFloat,
   GraphQLInputObjectType,
+  GraphQLNonNull,
 } from "graphql"
 import { MovieType } from "../Movie"
 
@@ -27,8 +28,9 @@ export const QuoteInputType = new GraphQLInputObjectType({
   description: "Aids with creating a new Quote.",
   fields: () => {
     return {
-      quoteCastName: { type: GraphQLString },
-      quoteText: { type: GraphQLString },
+      movieId: { type: new GraphQLNonNull(GraphQLInt) },
+      quoteCastName: { type: new GraphQLNonNull(GraphQLString) },
+      quoteText: { type: new GraphQLNonNull(GraphQLString) },
     }
   },
 })

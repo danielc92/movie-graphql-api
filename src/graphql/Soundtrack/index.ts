@@ -5,6 +5,7 @@ import {
   GraphQLFloat,
   GraphQLInputObjectType,
   GraphQLID,
+  GraphQLNonNull,
 } from "graphql"
 import { MovieType } from "../Movie"
 
@@ -28,9 +29,9 @@ export const SoundtrackInputType = new GraphQLInputObjectType({
   description: "Aids with creating a new Soundtrack.",
   fields: () => {
     return {
-      movieId: { type: GraphQLID },
-      soundtrackName: { type: GraphQLString },
-      soundtrackComposedBy: { type: GraphQLString },
+      movieId: { type: new GraphQLNonNull(GraphQLID) },
+      soundtrackName: { type: new GraphQLNonNull(GraphQLString) },
+      soundtrackComposedBy: { type: new GraphQLNonNull(GraphQLString) },
     }
   },
 })
