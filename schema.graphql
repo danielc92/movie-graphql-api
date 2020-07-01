@@ -81,6 +81,7 @@ type Movie {
   movieImageUrl: String
   movieDurationMins: Int
   movieHasBluray: Boolean
+  reviews: [Review]
 
   """An auto generated timestamp, upon creation."""
   createdAt: Float
@@ -176,7 +177,7 @@ type Review {
   movie: Movie
   user: User
   reviewText: String
-  reviewRating: Int
+  reviewRating: ReviewRatingEnum
   createdAt: Float
   updatedAt: Float
 }
@@ -186,7 +187,21 @@ input ReviewInput {
   movieId: Int!
   userId: Int!
   reviewText: String!
-  reviewRating: Int!
+  reviewRating: ReviewRatingEnum!
+}
+
+"""List of allowed values for a Review rating"""
+enum ReviewRatingEnum {
+  ONE_OUT_OF_TEN
+  TWO_OUT_OF_TEN
+  THREE_OUT_OF_TEN
+  FOUR_OUT_OF_TEN
+  FIVE_OUT_OF_TEN
+  SIX_OUT_OF_TEN
+  SEVEN_OUT_OF_TEN
+  EIGHT_OUT_OF_TEN
+  NINE_OUT_OF_TEN
+  TEN_OUT_OF_TEN
 }
 
 """A user"""
