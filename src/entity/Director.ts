@@ -10,7 +10,7 @@ import {
 import { Country } from "./Country"
 import { Movie } from "./Movie"
 
-@Entity()
+@Entity({ name: "director_tbl" })
 export class Director {
   @PrimaryGeneratedColumn()
   id: number

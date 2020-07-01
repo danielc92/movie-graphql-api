@@ -11,7 +11,7 @@ import {
 import { Review } from "./Review"
 import { Movie } from "./Movie"
 
-@Entity()
+@Entity({ name: "user_tbl" })
 export class User {
   @PrimaryGeneratedColumn()
   id: number

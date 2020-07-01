@@ -8,7 +8,7 @@ import {
 } from "typeorm"
 import { Movie } from "./Movie"
 
-@Entity()
+@Entity({ name: "award_tbl" })
 export class Award {
   @PrimaryGeneratedColumn()
   id: number

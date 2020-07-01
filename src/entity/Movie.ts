@@ -33,7 +33,7 @@ export enum MovieGenreEnum {
   ACTION = "Action",
   OTHER = "Other",
 }
-@Entity()
+@Entity({ name: "movie_tbl" })
 export class Movie {
   @PrimaryGeneratedColumn()
   id: number

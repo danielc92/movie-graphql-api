@@ -9,7 +9,7 @@ import {
 import { Movie } from "./Movie"
 import { User } from "./User"
 
-@Entity()
+@Entity({ name: "review_tbl" })
 export class Review {
   @PrimaryGeneratedColumn()
   id: number
