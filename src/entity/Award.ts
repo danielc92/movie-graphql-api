@@ -13,7 +13,7 @@ export class Award {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   awardName: string
 
   @Column()

@@ -15,7 +15,7 @@ export class Country {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   countryName: string
 
   @CreateDateColumn()
