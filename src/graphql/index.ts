@@ -29,7 +29,7 @@ import { Review } from "../entity/Review"
 import { Soundtrack } from "../entity/Soundtrack"
 import { SoundtrackType, SoundtrackInputType } from "./Soundtrack"
 import { Quote } from "../entity/Quote"
-import { QuoteType } from "./Quote.ts"
+import { QuoteType, QuoteInputType } from "./Quote.ts"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -76,7 +76,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     quotes: {
-      description: "Returns a list of Soundtracks.",
+      description: "Returns a list of Quotes.",
       type: new GraphQLList(QuoteType),
       args: {},
       resolve: async (parent, args) => {
@@ -225,6 +225,29 @@ const RootMutation = new GraphQLObjectType({
       },
     },
 
+    createQuote: {
+      type: QuoteType,
+      description: "Create a single Quote for a Movie",
+      args: {
+        patch: { type: QuoteInputType },
+      },
+      resolve: async (parent, args) => {
+        const record = new Quote()
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.patch.movieId)
+        if (!movie)
+          throw new Error("Movie does not exist, please check movieId")
+
+        record.movie = movie
+        record.quoteCastName = args.patch.quoteCastName
+        record.quoteText = args.patch.quoteText
+
+        const result = await getManager().save(record)
+
+        return result
+      },
+    },
     createSoundtrack: {
       type: SoundtrackType,
       description: "Create a single Soundtrack for a Movie",
