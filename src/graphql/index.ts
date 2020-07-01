@@ -396,6 +396,64 @@ const RootMutation = new GraphQLObjectType({
         return "Successfully linked award to movie."
       },
     },
+
+    linkMovieActor: {
+      type: GraphQLString,
+      description: "Associate an existing Actor with an existing Movie",
+      args: {
+        movieId: { type: new GraphQLNonNull(GraphQLInt) },
+        actorId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.movieId)
+        if (!movie)
+          throw new Error("Couldnt find Movie, please check the id is correct.")
+
+        const actor = await getManager()
+          .getRepository(Actor)
+          .findOne(args.actorId)
+        if (!actor)
+          throw new Error("Couldnt find Actor, please check the is correct.")
+
+        await createQueryBuilder()
+          .relation(Movie, "actors")
+          .of(movie)
+          .add(actor)
+
+        return "Successfully linked Actor to Movie."
+      },
+    },
+
+    linkMovieDirector: {
+      type: GraphQLString,
+      description: "Associate an existing Director with an existing Movie",
+      args: {
+        movieId: { type: new GraphQLNonNull(GraphQLInt) },
+        directorId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.movieId)
+        if (!movie)
+          throw new Error("Couldnt find Movie, please check the id is correct.")
+
+        const director = await getManager()
+          .getRepository(Director)
+          .findOne(args.directorId)
+        if (!director)
+          throw new Error("Couldnt find Director, please check the is correct.")
+
+        await createQueryBuilder()
+          .relation(Movie, "directors")
+          .of(movie)
+          .add(director)
+
+        return "Successfully linked Director to Movie."
+      },
+    },
     createAward: {
       type: AwardType,
       description: "Create a single Award.",
