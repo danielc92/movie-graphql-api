@@ -117,7 +117,7 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "query {\r\n    movies {\r\n        id\r\n        movieDurationMins\r\n        movieGenre\r\n        movieHasBluray\r\n        movieImageUrl\r\n        movieTitle\r\n        movieReleaseDate\r\n        movieType\r\n        createdAt\r\n        updatedAt\r\n        reviews {\r\n            id\r\n            reviewText\r\n            reviewRating\r\n\r\n        }\r\n    }\r\n}",
+						"query": "query {\r\n    movies {\r\n        id\r\n        movieDurationMins\r\n        movieGenre\r\n        movieHasBluray\r\n        movieImageUrl\r\n        movieTitle\r\n        movieReleaseDate\r\n        movieType\r\n        createdAt\r\n        updatedAt\r\n        reviews {\r\n            reviewText\r\n            reviewRating\r\n\r\n        }\r\n        directors {\r\n            id           \r\n        }\r\n        awards {\r\n            id\r\n        }\r\n        actors {\r\n            id\r\n        }\r\n\r\n    }\r\n}",
 						"variables": ""
 					}
 				},
@@ -196,6 +196,32 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation {\r\n    createActor (\r\n        patch: {\r\n            actorDob: \"1995-1-20\",\r\n            actorFirstName: \"Jack\",\r\n            actorLastName: \"Smith\"\r\n        }\r\n    ) {\r\n        id\r\n        actorFirstName\r\n        actorLastName\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createDirector",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n    createDirector (\r\n        patch: {\r\n            directorDob: \"1985-1-20\",\r\n            directorFirstName: \"Barry\",\r\n            directorLastName: \"Hool\"\r\n        }\r\n    ) {\r\n      createdAt\r\n      directorDob\r\n      directorFirstName\r\n      directorLastName\r\n      id\r\n    }\r\n}",
 						"variables": ""
 					}
 				},
@@ -326,6 +352,136 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation {\r\n    createActor (\r\n        patch: {\r\n            actorDob: \"1995-1-20\",\r\n            actorFirstName: \"Jack\",\r\n            actorLastName: \"Smith\"\r\n        }\r\n    ) {\r\n        id\r\n        actorFirstName\r\n        actorLastName\r\n    }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addToWishList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  addToWishList(userId:1, movieId:1)\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addToWatchedList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  addToWatchedList(userId:1, movieId:1)\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "linkMovieActor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  linkMovieActor(movieId: 1, actorId: 1)\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "linkMovieAward",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  linkMovieAward(awardId:1, movieId:1)\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3040/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3040",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "linkMovieDirector",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  linkMovieDirector(directorId:1, movieId:1)\r\n}",
 						"variables": ""
 					}
 				},

@@ -82,8 +82,9 @@ type Movie {
   movieDurationMins: Int
   movieHasBluray: Boolean
   reviews: [Review]
-
-  """An auto generated timestamp, upon creation."""
+  awards: [Award]
+  directors: [Director]
+  actors: [Actor]
   createdAt: Float
   updatedAt: Float
 }
@@ -132,42 +133,70 @@ enum MovieTypeEnum {
 
 """The root mutation."""
 type mutations {
-  """Create a new Review."""
+  """Create a single Review."""
   createReview(patch: ReviewInput): Review
 
-  """Create a new Movie."""
+  """Create a single Movie."""
   createMovie(patch: MovieInput): Movie
 
   """Update an existing Movie."""
   updateMovie(id: Int!, patch: MoviePatch): Movie
 
-  """Create a new Actor."""
+  """Create a single Actor."""
   createActor(patch: ActorInputType): Actor
 
-  """Create a new Director."""
+  """Create a single Director."""
   createDirector(patch: DirectorInputType): Director
 
-  """Create a new Country."""
+  """Create a single Country."""
   createCountry(patch: CountryInputType): Country
 
-  """Create a new User."""
+  """Create a single User."""
   createUser(patch: UserInput): User
 
   """Update an existing User"""
   updateUser(userId: ID!, patch: UserPatch): User
 
-  """Create a new Award."""
+  """Add a Movie to User's movieWishList."""
+  addToWishList(userId: Int!, movieId: Int!): String
+
+  """Add a Movie to User's movieWatchedList."""
+  addToWatchedList(userId: Int!, movieId: Int!): String
+
+  """Associate an existing Award with an existing Movie"""
+  linkMovieAward(movieId: Int!, awardId: Int!): String
+
+  """Associate an existing Actor with an existing Movie"""
+  linkMovieActor(movieId: Int!, actorId: Int!): String
+
+  """Associate an existing Director with an existing Movie"""
+  linkMovieDirector(movieId: Int!, directorId: Int!): String
+
+  """Create a single Award."""
   createAward(patch: AwardInput): Award
 }
 
 """The root query."""
 type queries {
+  """Returns a list of Movies."""
   movies: [Movie]
+
+  """Returns a list of Actors."""
   actors: [Actor]
+
+  """Returns a list of Reviews."""
   reviews: [Review]
+
+  """Returns a list of Directors."""
   directors: [Director]
+
+  """Returns a list of Countries."""
   countries: [Country]
+
+  """Returns a list of Users."""
   users: [User]
+
+  """Returns a list of Awards."""
   awards: [Award]
 }
 
@@ -213,6 +242,8 @@ type User {
   lastName: String
   createdAt: Float
   updatedAt: Float
+  movieWatchedList: [Movie]
+  movieWishList: [Movie]
 }
 
 """Used to create new users"""
