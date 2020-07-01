@@ -52,6 +52,7 @@ const RootQuery = new GraphQLObjectType({
     //   },
     // },
     movies: {
+      description: "Returns a list of Movies.",
       type: new GraphQLList(MovieType),
       args: {},
       resolve: async (parent, args) => {
@@ -63,6 +64,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     actors: {
+      description: "Returns a list of Actors.",
       type: new GraphQLList(ActorType),
       args: {},
       resolve: async (parent, args) => {
@@ -72,6 +74,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     reviews: {
+      description: "Returns a list of Reviews.",
       type: new GraphQLList(ReviewType),
       args: {},
       resolve: async (parent, args) => {
@@ -85,6 +88,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     directors: {
+      description: "Returns a list of Directors.",
       type: new GraphQLList(DirectorType),
       args: {},
       resolve: async (parent, args) => {
@@ -94,6 +98,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     countries: {
+      description: "Returns a list of Countries.",
       type: new GraphQLList(CountryType),
       args: {},
       resolve: async (parent, args) => {
@@ -103,6 +108,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     users: {
+      description: "Returns a list of Users.",
       type: new GraphQLList(UserType),
       args: {},
       resolve: async (parent, args) => {
@@ -114,6 +120,7 @@ const RootQuery = new GraphQLObjectType({
     },
 
     awards: {
+      description: "Returns a list of Awards.",
       type: new GraphQLList(AwardType),
       args: {},
       resolve: async (parent, args) => {
@@ -162,8 +169,8 @@ const RootMutation = new GraphQLObjectType({
     // },
 
     createReview: {
+      description: "Create a single Review.",
       type: ReviewType,
-      description: "Create a new Review.",
       args: {
         patch: { type: ReviewInputType },
       },
@@ -189,7 +196,7 @@ const RootMutation = new GraphQLObjectType({
 
     createMovie: {
       type: MovieType,
-      description: "Create a new Movie.",
+      description: "Create a single Movie.",
       args: {
         patch: { type: MovieInputType },
       },
@@ -224,7 +231,7 @@ const RootMutation = new GraphQLObjectType({
 
     createActor: {
       type: ActorType,
-      description: "Create a new Actor.",
+      description: "Create a single Actor.",
       args: {
         patch: { type: ActorInputType },
       },
@@ -241,7 +248,7 @@ const RootMutation = new GraphQLObjectType({
 
     createDirector: {
       type: DirectorType,
-      description: "Create a new Director.",
+      description: "Create a single Director.",
       args: {
         patch: { type: DirectorInputType },
       },
@@ -258,7 +265,7 @@ const RootMutation = new GraphQLObjectType({
 
     createCountry: {
       type: CountryType,
-      description: "Create a new Country.",
+      description: "Create a single Country.",
       args: {
         patch: { type: CountryInputType },
       },
@@ -275,7 +282,7 @@ const RootMutation = new GraphQLObjectType({
 
     createUser: {
       type: UserType,
-      description: "Create a new User.",
+      description: "Create a single User.",
       args: {
         patch: { type: UserInputType },
       },
@@ -310,7 +317,7 @@ const RootMutation = new GraphQLObjectType({
 
     addToWishList: {
       type: GraphQLString,
-      description: "Add a movie to User wish list.",
+      description: "Add a Movie to User's movieWishList.",
       args: {
         userId: { type: new GraphQLNonNull(GraphQLInt) },
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
@@ -336,7 +343,7 @@ const RootMutation = new GraphQLObjectType({
     },
     addToWatchedList: {
       type: GraphQLString,
-      description: "Add a movie to User watched list.",
+      description: "Add a Movie to User's movieWatchedList.",
       args: {
         userId: { type: new GraphQLNonNull(GraphQLInt) },
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
@@ -362,7 +369,7 @@ const RootMutation = new GraphQLObjectType({
     },
     createAward: {
       type: AwardType,
-      description: "Create a new Award.",
+      description: "Create a single Award.",
       args: {
         patch: { type: AwardInputType },
       },
