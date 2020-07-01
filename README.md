@@ -51,94 +51,115 @@ npm run db-console
 ### Query
 
 ```
-"queryType": {
-        "fields": [
+[
           {
-            "name": "movies"
+            "name": "movies",
+            "description": "Returns a list of Movies."
           },
           {
-            "name": "quotes"
+            "name": "quotes",
+            "description": "Returns a list of Quotes."
           },
           {
-            "name": "soundtracks"
+            "name": "soundtracks",
+            "description": "Returns a list of Soundtracks."
           },
           {
-            "name": "actors"
+            "name": "actors",
+            "description": "Returns a list of Actors."
           },
           {
-            "name": "reviews"
+            "name": "reviews",
+            "description": "Returns a list of Reviews."
           },
           {
-            "name": "directors"
+            "name": "directors",
+            "description": "Returns a list of Directors."
           },
           {
-            "name": "countries"
+            "name": "countries",
+            "description": "Returns a list of Countries."
           },
           {
-            "name": "users"
+            "name": "users",
+            "description": "Returns a list of Users."
           },
           {
-            "name": "awards"
+            "name": "awards",
+            "description": "Returns a list of Awards."
           }
         ]
-      },
 ```
 
 ### Mutations
 
 ```
-"mutationType": {
-        "fields": [
+[
           {
-            "name": "createReview"
+            "name": "createReview",
+            "description": "Create a single Review."
           },
           {
-            "name": "createQuote"
+            "name": "createQuote",
+            "description": "Create a single Quote for a Movie"
           },
           {
-            "name": "createSoundtrack"
+            "name": "createSoundtrack",
+            "description": "Create a single Soundtrack for a Movie"
           },
           {
-            "name": "createMovie"
+            "name": "createMovie",
+            "description": "Create a single Movie."
           },
           {
-            "name": "updateMovie"
+            "name": "updateMovie",
+            "description": "Update an existing Movie."
           },
           {
-            "name": "createActor"
+            "name": "createActor",
+            "description": "Create a single Actor."
           },
           {
-            "name": "createDirector"
+            "name": "createDirector",
+            "description": "Create a single Director."
           },
           {
-            "name": "createCountry"
+            "name": "createCountry",
+            "description": "Create a single Country."
           },
           {
-            "name": "createUser"
+            "name": "createUser",
+            "description": "Create a single User."
           },
           {
-            "name": "updateUser"
+            "name": "updateUser",
+            "description": "Update an existing User"
           },
           {
-            "name": "addToWishList"
+            "name": "addToWishList",
+            "description": "Add a Movie to User's movieWishList."
           },
           {
-            "name": "addToWatchedList"
+            "name": "addToWatchedList",
+            "description": "Add a Movie to User's movieWatchedList."
           },
           {
-            "name": "linkMovieAward"
+            "name": "linkMovieAward",
+            "description": "Associate an existing Award with an existing Movie"
           },
           {
-            "name": "linkMovieActor"
+            "name": "linkMovieActor",
+            "description": "Associate an existing Actor with an existing Movie"
           },
           {
-            "name": "linkMovieDirector"
+            "name": "linkMovieDirector",
+            "description": "Associate an existing Director with an existing Movie"
           },
           {
-            "name": "createAward"
+            "name": "createAward",
+            "description": "Create a single Award."
           }
         ]
-      }
 ```
 
 ### Configuration
