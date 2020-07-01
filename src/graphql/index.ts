@@ -8,7 +8,7 @@ import {
   GraphQLError,
   GraphQLID,
 } from "graphql"
-import { getManager } from "typeorm"
+import { getManager, createQueryBuilder } from "typeorm"
 import { Dummy } from "../entity/Dummy"
 import { Movie } from "../entity/Movie"
 import { DummyType, DummyPatchType } from "./Dummy"
@@ -106,7 +106,9 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       args: {},
       resolve: async (parent, args) => {
-        const data = await getManager().getRepository(User).find()
+        const data = await getManager()
+          .getRepository(User)
+          .find({ relations: ["movieWishList", "movieWatchedList"] })
         return data
       },
     },
@@ -306,6 +308,58 @@ const RootMutation = new GraphQLObjectType({
       },
     },
 
+    addToWishList: {
+      type: GraphQLString,
+      description: "Add a movie to User wish list.",
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLInt) },
+        movieId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const user = await getManager().getRepository(User).findOne(args.userId)
+        if (!user)
+          throw new Error("Couldnt find user, please check the is correct.")
+
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.movieId)
+        if (!movie)
+          throw new Error("Couldnt find movie, please check the id is correct.")
+
+        await createQueryBuilder()
+          .relation(User, "movieWishList")
+          .of(user)
+          .add(movie)
+
+        return "Successfully added movie to wishlist."
+      },
+    },
+    addToWatchedList: {
+      type: GraphQLString,
+      description: "Add a movie to User watched list.",
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLInt) },
+        movieId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const user = await getManager().getRepository(User).findOne(args.userId)
+        if (!user)
+          throw new Error("Couldnt find user, please check the is correct.")
+
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.movieId)
+        if (!movie)
+          throw new Error("Couldnt find movie, please check the id is correct.")
+
+        await createQueryBuilder()
+          .relation(User, "movieWatchedList")
+          .of(user)
+          .add(movie)
+
+        return "Successfully added movie to watchlist."
+      },
+    },
     createAward: {
       type: AwardType,
       description: "Create a new Award.",
