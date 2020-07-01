@@ -16,6 +16,8 @@ import { Actor } from "./Actor"
 import { Director } from "./Director"
 import { Country } from "./Country"
 import { User } from "./User"
+import { Quote } from "./Quote"
+import { Soundtrack } from "./Soundtrack"
 
 export enum MovieTypeEnum {
   TV_SERIES = "TV series",
@@ -80,6 +82,12 @@ export class Movie {
 
   @OneToMany((type) => Review, (review) => review.user)
   reviews: Review[]
+
+  @OneToMany((type) => Quote, (quote) => quote.movie)
+  quotes: Quote[]
+
+  @OneToMany((type) => Soundtrack, (soundtrack) => soundtrack.movie)
+  soundtracks: Soundtrack[]
 
   @ManyToMany((type) => Award, (award) => award.movies)
   @JoinTable()
