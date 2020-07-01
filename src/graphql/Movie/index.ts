@@ -11,6 +11,9 @@ import {
   GraphQLList,
 } from "graphql"
 import { ReviewType } from "../Review"
+import { ActorType } from "../Actor"
+import { DirectorType } from "../Director"
+import { AwardType } from "../Award"
 
 export const MovieGenreEnumType = new GraphQLEnumType({
   name: "MovieGenreEnum",
@@ -74,10 +77,10 @@ export const MovieType = new GraphQLObjectType({
       movieDurationMins: { type: GraphQLInt },
       movieHasBluray: { type: GraphQLBoolean },
       reviews: { type: new GraphQLList(ReviewType) },
-      createdAt: {
-        type: GraphQLFloat,
-        description: "An auto generated timestamp, upon creation.",
-      },
+      awards: { type: new GraphQLList(AwardType) },
+      directors: { type: new GraphQLList(DirectorType) },
+      actors: { type: new GraphQLList(ActorType) },
+      createdAt: { type: GraphQLFloat },
       updatedAt: { type: GraphQLFloat },
     }
   },
