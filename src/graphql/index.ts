@@ -58,7 +58,7 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (parent, args) => {
         const data = await getManager()
           .getRepository(Movie)
-          .find({ relations: ["reviews"] })
+          .find({ relations: ["reviews", "awards", "directors", "actors"] })
         return data
       },
     },
@@ -365,6 +365,35 @@ const RootMutation = new GraphQLObjectType({
           .add(movie)
 
         return "Successfully added movie to watchlist."
+      },
+    },
+
+    linkMovieAward: {
+      type: GraphQLString,
+      description: "Associate an existing Award with an existing Movie",
+      args: {
+        movieId: { type: new GraphQLNonNull(GraphQLInt) },
+        awardId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: async (parent, args) => {
+        const movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.movieId)
+        if (!movie)
+          throw new Error("Couldnt find Movie, please check the id is correct.")
+
+        const award = await getManager()
+          .getRepository(Award)
+          .findOne(args.awardId)
+        if (!award)
+          throw new Error("Couldnt find Award, please check the is correct.")
+
+        await createQueryBuilder()
+          .relation(Movie, "awards")
+          .of(movie)
+          .add(award)
+
+        return "Successfully linked award to movie."
       },
     },
     createAward: {
