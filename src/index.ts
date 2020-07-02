@@ -1,8 +1,8 @@
 import "reflect-metadata"
 import { createConnection } from "typeorm"
-import * as express from "express"
-import * as helmet from "helmet"
-import * as graphqlHTTP from "express-graphql"
+import express from "express"
+import helmet from "helmet"
+import graphqlHTTP from "express-graphql"
 import schema from "./graphql"
 
 createConnection()
