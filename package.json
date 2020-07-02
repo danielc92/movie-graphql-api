@@ -24,6 +24,8 @@
   },
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "prod": "nodemon build/index.js",
     "db-kill": "docker kill pg-movies && docker rm pg-movies",
     "db-start": "docker run --name pg-movies -p 5432:5432 -e POSTGRES_DB=movies -e POSTGRES_PASSWORD=secret -d postgres",
     "db-restart": "docker restart pg-movies",
