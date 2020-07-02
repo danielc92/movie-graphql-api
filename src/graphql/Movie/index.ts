@@ -16,6 +16,7 @@ import { DirectorType } from "../Director"
 import { AwardType } from "../Award"
 import { SoundtrackType } from "../Soundtrack"
 import { QuoteType } from "../Quote.ts"
+import { CastType } from "../Cast"
 
 export const MovieGenreEnumType = new GraphQLEnumType({
   name: "MovieGenreEnum",
@@ -83,7 +84,7 @@ export const MovieType = new GraphQLObjectType({
       directors: { type: new GraphQLList(DirectorType) },
       soundtracks: { type: new GraphQLList(SoundtrackType) },
       quotes: { type: new GraphQLList(QuoteType) },
-      actors: { type: new GraphQLList(ActorType) },
+      casts: { type: new GraphQLList(CastType) },
       createdAt: { type: GraphQLFloat },
       updatedAt: { type: GraphQLFloat },
     }
