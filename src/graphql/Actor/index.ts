@@ -5,6 +5,7 @@ import {
   GraphQLString,
   GraphQLFloat,
   GraphQLInt,
+  GraphQLID,
 } from "graphql"
 
 export const ActorType = new GraphQLObjectType({
@@ -15,6 +16,7 @@ export const ActorType = new GraphQLObjectType({
       id: { type: GraphQLInt },
       actorFirstName: { type: GraphQLString },
       actorLastName: { type: GraphQLString },
+      actorAvatarUrl: { type: GraphQLString },
       actorDob: { type: GraphQLString },
       createdAt: { type: GraphQLFloat },
       updatedAt: { type: GraphQLFloat },
@@ -29,7 +31,9 @@ export const ActorInputType = new GraphQLInputObjectType({
     return {
       actorFirstName: { type: new GraphQLNonNull(GraphQLString) },
       actorLastName: { type: new GraphQLNonNull(GraphQLString) },
+      actorAvatarUrl: { type: GraphQLString },
       actorDob: { type: GraphQLString },
+      countryId: { type: new GraphQLNonNull(GraphQLInt) },
     }
   },
 })
