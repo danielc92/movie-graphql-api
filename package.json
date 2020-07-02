@@ -22,7 +22,6 @@
     "typeorm": "0.2.25"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "db-kill": "docker kill pg-movies && docker rm pg-movies",
     "db-start": "docker run --name pg-movies -p 5432:5432 -e POSTGRES_DB=movies -e POSTGRES_PASSWORD=secret -d postgres",
