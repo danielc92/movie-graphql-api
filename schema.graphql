@@ -14,7 +14,10 @@ type Actor {
   id: Int
   actorFirstName: String
   actorLastName: String
+  actorAvatarUrl: String
   actorDob: String
+  casts: [Cast]
+  country: Country
   createdAt: Float
   updatedAt: Float
 }
@@ -23,7 +26,9 @@ type Actor {
 input ActorInputType {
   actorFirstName: String!
   actorLastName: String!
+  actorAvatarUrl: String
   actorDob: String
+  countryId: Int!
 }
 
 """An award associated with movies"""
@@ -39,6 +44,27 @@ type Award {
 input AwardInput {
   awardName: String!
   awardYear: Int!
+}
+
+"""Represents a single Cast for a Movie"""
+type Cast {
+  id: Int
+  castFirstName: String
+  castLastName: String
+  castAvatarUrl: String
+  createdAt: Float
+  updatedAt: Float
+  actor: Actor
+  movie: Movie
+}
+
+"""Aids with the creation of a new Cast."""
+input CastInput {
+  castFirstName: String!
+  castLastName: String!
+  castAvatarUrl: String
+  actorId: Int!
+  movieId: Int!
 }
 
 """A country type."""
@@ -84,7 +110,9 @@ type Movie {
   reviews: [Review]
   awards: [Award]
   directors: [Director]
-  actors: [Actor]
+  soundtracks: [Soundtrack]
+  quotes: [Quote]
+  casts: [Cast]
   createdAt: Float
   updatedAt: Float
 }
@@ -136,6 +164,12 @@ type mutations {
   """Create a single Review."""
   createReview(patch: ReviewInput): Review
 
+  """Create a single Quote for a Movie"""
+  createQuote(patch: QuoteInput): Quote
+
+  """Create a single Soundtrack for a Movie"""
+  createSoundtrack(patch: SoundtrackInput): Soundtrack
+
   """Create a single Movie."""
   createMovie(patch: MovieInput): Movie
 
@@ -150,6 +184,9 @@ type mutations {
 
   """Create a single Country."""
   createCountry(patch: CountryInputType): Country
+
+  """Create a single Cast for a Movie."""
+  createCast(patch: CastInput): Cast
 
   """Create a single User."""
   createUser(patch: UserInput): User
@@ -166,9 +203,6 @@ type mutations {
   """Associate an existing Award with an existing Movie"""
   linkMovieAward(movieId: Int!, awardId: Int!): String
 
-  """Associate an existing Actor with an existing Movie"""
-  linkMovieActor(movieId: Int!, actorId: Int!): String
-
   """Associate an existing Director with an existing Movie"""
   linkMovieDirector(movieId: Int!, directorId: Int!): String
 
@@ -181,8 +215,17 @@ type queries {
   """Returns a list of Movies."""
   movies: [Movie]
 
+  """Returns a list of Quotes."""
+  quotes: [Quote]
+
+  """Returns a list of Soundtracks."""
+  soundtracks: [Soundtrack]
+
   """Returns a list of Actors."""
   actors: [Actor]
+
+  """Returns a list of Casts."""
+  casts: [Cast]
 
   """Returns a list of Reviews."""
   reviews: [Review]
@@ -198,6 +241,23 @@ type queries {
 
   """Returns a list of Awards."""
   awards: [Award]
+}
+
+"""Represents a Quote for a Movie."""
+type Quote {
+  id: Int
+  quoteCastName: String
+  quoteText: String
+  movie: Movie
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""Aids with creating a new Quote."""
+input QuoteInput {
+  movieId: Int!
+  quoteCastName: String!
+  quoteText: String!
 }
 
 """Represents a Movie review."""
@@ -231,6 +291,23 @@ enum ReviewRatingEnum {
   EIGHT_OUT_OF_TEN
   NINE_OUT_OF_TEN
   TEN_OUT_OF_TEN
+}
+
+"""Represents a Soundtrack for a Movie."""
+type Soundtrack {
+  id: Int
+  movie: Movie
+  soundtrackName: String
+  soundtrackComposedBy: String
+  createdAt: Float
+  updatedAt: Float
+}
+
+"""Aids with creating a new Soundtrack."""
+input SoundtrackInput {
+  movieId: ID!
+  soundtrackName: String!
+  soundtrackComposedBy: String!
 }
 
 """A user"""
