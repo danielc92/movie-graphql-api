@@ -5,8 +5,10 @@ import {
   GraphQLString,
   GraphQLFloat,
   GraphQLInt,
-  GraphQLID,
+  GraphQLList,
 } from "graphql"
+import { CountryType } from "../Country"
+import { CastType } from "../Cast"
 
 export const ActorType = new GraphQLObjectType({
   name: "Actor",
@@ -18,6 +20,8 @@ export const ActorType = new GraphQLObjectType({
       actorLastName: { type: GraphQLString },
       actorAvatarUrl: { type: GraphQLString },
       actorDob: { type: GraphQLString },
+      casts: { type: new GraphQLList(CastType) },
+      country: { type: CountryType },
       createdAt: { type: GraphQLFloat },
       updatedAt: { type: GraphQLFloat },
     }

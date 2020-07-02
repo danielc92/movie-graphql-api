@@ -11,7 +11,6 @@ import {
 } from "typeorm"
 import { Review } from "./Review"
 import { Award } from "./Award"
-import { Actor } from "./Actor"
 import { Director } from "./Director"
 import { Country } from "./Country"
 import { User } from "./User"
