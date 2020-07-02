@@ -30,6 +30,8 @@ import { Soundtrack } from "../entity/Soundtrack"
 import { SoundtrackType, SoundtrackInputType } from "./Soundtrack"
 import { Quote } from "../entity/Quote"
 import { QuoteType, QuoteInputType } from "./Quote.ts"
+import { CastType, CastInputType } from "./Cast"
+import { Cast } from "../entity/Cast"
 
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -364,6 +366,45 @@ const RootMutation = new GraphQLObjectType({
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
         })
+
+        const result = await getManager().save(record)
+        return result
+      },
+    },
+
+    // castFirstName: { type: new GraphQLNonNull(GraphQLString) },
+    // castLastName: { type: new GraphQLNonNull(GraphQLString) },
+    // castAvatarUrl: { type: GraphQLString },
+    // actorId: { type: new GraphQLNonNull(GraphQLInt) },
+    // movieId: { type: new GraphQLNo
+
+    createCast: {
+      type: CastType,
+      description: "Create a single Cast for a Movie.",
+      args: {
+        patch: { type: CastInputType },
+      },
+      resolve: async (parent, args) => {
+        let movie = await getManager()
+          .getRepository(Movie)
+          .findOne(args.patch.movieId)
+        if (!movie)
+          throw new Error("Movie does not exist, please check the movieId")
+
+        let actor = await getManager()
+          .getRepository(Actor)
+          .findOne(args.patch.actorId)
+        if (!actor)
+          throw new Error("Actor does not exist, please check the actorId")
+
+        let record = new Cast()
+
+        record.castFirstName = args.patch.castFirstName
+        record.castLastName = args.patch.castLastName
+
+        if (args.patch.castAvatarUrl) {
+          record.castAvatarUrl = args.patch.castAvatarUrl
+        }
 
         const result = await getManager().save(record)
         return result
