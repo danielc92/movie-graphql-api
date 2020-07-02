@@ -37,26 +37,6 @@ const RootQuery = new GraphQLObjectType({
   description: "The root query.",
   name: "queries",
   fields: {
-    // dummy: {
-    //   type: DummyType,
-    //   args: {
-    //     id: { type: GraphQLInt },
-    //   },
-    //   resolve: async (parent, args) => {
-    //     const repo = getManager().getRepository(Dummy)
-    //     const data = await repo.findOne(args.id)
-    //     return data
-    //   },
-    // },
-    // dummies: {
-    //   type: new GraphQLList(DummyType),
-    //   args: {},
-    //   resolve: async (parent, args) => {
-    //     const repo = getManager().getRepository(Dummy)
-    //     const data = await repo.find()
-    //     return data
-    //   },
-    // },
     movies: {
       description: "Returns a list of Movies.",
       type: new GraphQLList(MovieType),
@@ -70,10 +50,12 @@ const RootQuery = new GraphQLObjectType({
               "soundtracks",
               "awards",
               "directors",
-              "actors",
+              "casts",
+              "casts.actor",
               "quotes",
             ],
           })
+        console.log(data, "Movies")
         return data
       },
     },
@@ -101,7 +83,25 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(ActorType),
       args: {},
       resolve: async (parent, args) => {
-        const data = await getManager().getRepository(Actor).find()
+        const data = await getManager()
+          .getRepository(Actor)
+          .find({
+            relations: ["country", "casts", "casts.movie"],
+          })
+        return data
+      },
+    },
+
+    casts: {
+      description: "Returns a list of Casts.",
+      type: new GraphQLList(CastType),
+      args: {},
+      resolve: async (parent, args) => {
+        const data = await getManager()
+          .getRepository(Cast)
+          .find({
+            relations: ["actor", "movie"],
+          })
         return data
       },
     },
@@ -168,39 +168,6 @@ const RootMutation = new GraphQLObjectType({
   description: "The root mutation.",
   name: "mutations",
   fields: {
-    // addDummy: {
-    //   description: "Add a dummy to the database.",
-    //   type: DummyType,
-    //   args: {
-    //     text: { type: new GraphQLNonNull(GraphQLInt) },
-    //     nullableText: { type: GraphQLString },
-    //   },
-    //   resolve: async (parent, args) => {
-    //     let data = new Dummy()
-    //     data.text = args.text
-    //     data.nullableText = args.nullableText
-    //     return await getManager().save(data)
-    //   },
-    // },
-    // patchDummy: {
-    //   type: DummyType,
-    //   description: "Update an existing dummy to the database.",
-    //   args: {
-    //     id: { type: new GraphQLNonNull(GraphQLInt) },
-    //     patch: { type: DummyPatchType },
-    //   },
-    //   resolve: async (parent, args) => {
-    //     let repo = getManager().getRepository(Dummy)
-    //     let item = await repo.findOne(args.id)
-
-    //     Object.entries(args.patch).forEach((x) => {
-    //       item[x[0]] = x[1]
-    //     })
-
-    //     return await getManager().save(item)
-    //   },
-    // },
-
     createReview: {
       description: "Create a single Review.",
       type: ReviewType,
@@ -319,6 +286,7 @@ const RootMutation = new GraphQLObjectType({
         let record = new Actor()
         record.actorDob = args.patch.actorDob
         record.actorFirstName = args.patch.actorFirstName
+        record.actorLastName = args.patch.actorLastName
         if (args.patch.actorAvatarUrl) {
           record.actorAvatarUrl = args.patch.actorAvatarUrl
         }
@@ -372,12 +340,6 @@ const RootMutation = new GraphQLObjectType({
       },
     },
 
-    // castFirstName: { type: new GraphQLNonNull(GraphQLString) },
-    // castLastName: { type: new GraphQLNonNull(GraphQLString) },
-    // castAvatarUrl: { type: GraphQLString },
-    // actorId: { type: new GraphQLNonNull(GraphQLInt) },
-    // movieId: { type: new GraphQLNo
-
     createCast: {
       type: CastType,
       description: "Create a single Cast for a Movie.",
@@ -401,6 +363,8 @@ const RootMutation = new GraphQLObjectType({
 
         record.castFirstName = args.patch.castFirstName
         record.castLastName = args.patch.castLastName
+        record.actor = actor
+        record.movie = movie
 
         if (args.patch.castAvatarUrl) {
           record.castAvatarUrl = args.patch.castAvatarUrl
