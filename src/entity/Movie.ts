@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
-  JoinColumn,
   JoinTable,
   ManyToOne,
 } from "typeorm"
@@ -18,6 +17,7 @@ import { Country } from "./Country"
 import { User } from "./User"
 import { Quote } from "./Quote"
 import { Soundtrack } from "./Soundtrack"
+import { Cast } from "./Cast"
 
 export enum MovieTypeEnum {
   TV_SERIES = "TV series",
@@ -93,9 +93,8 @@ export class Movie {
   @JoinTable()
   awards: Award[]
 
-  @ManyToMany((type) => Actor, (actor) => actor.movies)
-  @JoinTable()
-  actors: Actor[]
+  @OneToMany((type) => Cast, (cast) => cast.movie)
+  casts: Cast[]
 
   @ManyToMany((type) => Director, (director) => director.movies)
   @JoinTable()
