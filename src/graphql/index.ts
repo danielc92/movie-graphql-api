@@ -314,10 +314,22 @@ const RootMutation = new GraphQLObjectType({
         patch: { type: ActorInputType },
       },
       resolve: async (parent, args) => {
-        const record = new Actor()
-        Object.entries(args.patch).forEach((x) => {
-          record[x[0]] = x[1]
-        })
+        let record = new Actor()
+        record.actorDob = args.patch.actorDob
+        record.actorFirstName = args.patch.actorFirstName
+        if (args.patch.actorAvatarUrl) {
+          record.actorAvatarUrl = args.patch.actorAvatarUrl
+        }
+
+        const country = await getManager()
+          .getRepository(Country)
+          .findOne(args.patch.countryId)
+        if (!country)
+          throw new Error(
+            "This country does not exist, please check the countryId."
+          )
+
+        record.country = country
 
         const result = await getManager().save(record)
         return result
