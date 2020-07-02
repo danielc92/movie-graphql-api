@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   ManyToOne,
   ManyToMany,
+  OneToMany,
 } from "typeorm"
 import { Country } from "./Country"
 import { Movie } from "./Movie"
+import { Cast } from "./Cast"
 
 @Entity({ name: "actor_tbl" })
 export class Actor {
@@ -24,6 +26,9 @@ export class Actor {
   @Column({ nullable: true })
   actorDob: Date
 
+  @Column({ nullable: true })
+  actorAvatarUrl: string
+
   @CreateDateColumn()
   createdAt: string
 
@@ -32,8 +37,8 @@ export class Actor {
 
   // Relations
 
-  @ManyToMany((type) => Movie, (movie) => movie.actors)
-  movies: Movie[]
+  @OneToMany((type) => Cast, (cast) => cast.actor)
+  casts: Cast[]
 
   @ManyToOne((type) => Country, (country) => country.actors)
   country: Country
