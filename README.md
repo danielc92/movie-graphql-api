@@ -165,3 +165,12 @@ npm run db-console
 ### Configuration
 
 TypeORM configuration can be modified in `ormconfig.json` in root of project. Currently the project uses a docker/postgres setup for local development.
+
+For making prod builds use the following settings;
+
+```
+  "entities": ["build/entity/**/*.js"],
+  "migrations": ["build/migration/**/*.js"],
+  "subscribers": ["build/subscriber/**/*.js"],
+
+```
