@@ -55,7 +55,6 @@ const RootQuery = new GraphQLObjectType({
               "quotes",
             ],
           })
-        console.log(data, "Movies")
         return data
       },
     },
