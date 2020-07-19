@@ -6,11 +6,12 @@
   "password": "secret",
   "database": "movies",
   "synchronize": true,
-  "logging": false,
+  "logging": true,
   "dropSchema": false,
-  "entities": ["build/entity/**/*.js"],
-  "migrations": ["build/migration/**/*.js"],
-  "subscribers": ["build/subscriber/**/*.js"],
+  "entities": ["src/entity/**/*.ts"],
+  "migrations": ["src/migration/**/*.ts"],
+  "subscribers": ["src/subscriber/**/*.ts"],
+
   "cli": {
     "entitiesDir": "src/entity",
     "migrationsDir": "src/migration",
