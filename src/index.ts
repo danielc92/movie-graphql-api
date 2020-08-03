@@ -12,7 +12,6 @@ createConnection()
     const app = express()
     app.use(cors())
     app.use(helmet())
-    console.log(process.env, "ENV")
     app.use(
       "/graphql",
       graphqlHTTP({
