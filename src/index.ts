@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import { createConnection } from "typeorm"
-import express from "express"
+import express, { Request, Response, NextFunction } from "express"
 import helmet from "helmet"
 import graphqlHTTP from "express-graphql"
 import schema from "./graphql"
@@ -11,6 +11,10 @@ createConnection()
     const app = express()
     app.use(cors())
     app.use(helmet())
+    app.use("/", (request: Request, response: Response, next: NextFunction) => {
+      request.user = "Test"
+      next()
+    })
     app.use(
       "/graphql",
       graphqlHTTP({
