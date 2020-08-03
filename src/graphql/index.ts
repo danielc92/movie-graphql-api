@@ -468,7 +468,7 @@ const RootMutation = new GraphQLObjectType({
             lastName: user.lastName,
           },
           process.env.TOKEN_SECRET,
-          { expiresIn: process.env.TOKEN_EXPIRY }
+          { expiresIn: parseInt(process.env.TOKEN_EXPIRY) }
         )
         return {
           token,
