@@ -8,10 +8,10 @@ import {
   GraphQLError,
   GraphQLID,
 } from "graphql"
+import * as bcrypt from "bcrypt"
+import * as jwt from "jsonwebtoken"
 import { getManager, createQueryBuilder } from "typeorm"
-import { Dummy } from "../entity/Dummy"
 import { Movie } from "../entity/Movie"
-import { DummyType, DummyPatchType } from "./Dummy"
 import { MovieType, MovieInputType, MoviePatchType } from "./Movie"
 import { CountryType, CountryInputType } from "./Country"
 import { Country } from "../entity/Country"
@@ -19,11 +19,16 @@ import { DirectorType, DirectorInputType } from "./Director"
 import { Director } from "../entity/Director"
 import { ActorType, ActorInputType } from "./Actor"
 import { Actor } from "../entity/Actor"
-import { UserType, UserInputType, UserPatchType } from "./User"
+import {
+  UserType,
+  UserInputType,
+  UserPatchType,
+  UserLoggedInSuccess,
+  UserLoggedInTry,
+} from "./User"
 import { User } from "../entity/User"
 import { AwardType, AwardInputType } from "./Award"
 import { Award } from "../entity/Award"
-import * as bcrypt from "bcrypt"
 import { ReviewType, ReviewInputType } from "./Review"
 import { Review } from "../entity/Review"
 import { Soundtrack } from "../entity/Soundtrack"
@@ -33,15 +38,20 @@ import { QuoteType, QuoteInputType } from "./Quote.ts"
 import { CastType, CastInputType } from "./Cast"
 import { Cast } from "../entity/Cast"
 
+const GQL_NAMES = {
+  QUERY_MOVIES: "movies",
+}
+
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
   name: "queries",
   fields: {
-    movies: {
+    [GQL_NAMES.QUERY_MOVIES]: {
       description: "Returns a list of Movies.",
       type: new GraphQLList(MovieType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, ctx) => {
+        console.log(ctx.user, "CONTEXT")
         const data = await getManager()
           .getRepository(Movie)
           .find({
@@ -388,6 +398,45 @@ const RootMutation = new GraphQLObjectType({
         record.password = await bcrypt.hash(args.patch.password, 10)
         const result = await getManager().save(record)
         return result
+      },
+    },
+
+    loginUser: {
+      type: UserLoggedInSuccess,
+      description: "Authenticate a User",
+      args: {
+        patch: { type: UserLoggedInTry },
+      },
+      resolve: async (parent, args) => {
+        console.log(args.patch)
+
+        const repo = getManager().getRepository(User)
+        const user = await repo.findOne({
+          where: {
+            email: args.patch.email,
+          },
+        })
+        if (!user) return new GraphQLError("Invalid email")
+
+        const isPasswordMatch = await bcrypt.compare(
+          args.patch.password,
+          user.password
+        )
+
+        if (!isPasswordMatch) return new GraphQLError("Invalid credentials")
+
+        const token = jwt.sign(
+          {
+            email: args.patch.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+          "secret",
+          { expiresIn: 60 * 60 * 60 }
+        )
+        return {
+          token,
+        }
       },
     },
 

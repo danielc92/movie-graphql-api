@@ -6,8 +6,36 @@ import {
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLList,
+  GraphQLScalarType,
 } from "graphql"
 import { MovieType } from "../Movie"
+
+export const UserLoggedInSuccess = new GraphQLObjectType({
+  name: "UserLoggedInSuccess",
+  description: "A type for logged in user",
+  fields: () => {
+    return {
+      token: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    }
+  },
+})
+
+export const UserLoggedInTry = new GraphQLInputObjectType({
+  name: "UserLoggedInTry",
+  description: "A type for logged in user",
+  fields: () => {
+    return {
+      email: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      password: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+    }
+  },
+})
 
 export const UserType = new GraphQLObjectType({
   name: "User",
