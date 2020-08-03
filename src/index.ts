@@ -11,10 +11,7 @@ createConnection()
     const app = express()
     app.use(cors())
     app.use(helmet())
-    app.use("/", (request: Request, response: Response, next: NextFunction) => {
-      request.user = "Test"
-      next()
-    })
+
     app.use(
       "/graphql",
       graphqlHTTP({

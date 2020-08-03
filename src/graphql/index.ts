@@ -38,20 +38,33 @@ import { QuoteType, QuoteInputType } from "./Quote.ts"
 import { CastType, CastInputType } from "./Cast"
 import { Cast } from "../entity/Cast"
 
-const GQL_NAMES = {
-  QUERY_MOVIES: "movies",
+const handleAuth = async (
+  token: string | null | undefined,
+  routeRequiresAuth: boolean
+) => {
+  if (!routeRequiresAuth) return null
+  if (routeRequiresAuth && !token)
+    return "Missing token, send in 'x-access-token' header"
+  try {
+    const verify = await jwt.verify(token, "secret")
+    if (!verify) return "You are not authorized."
+    return null
+  } catch (e) {
+    return "You are not authorized"
+  }
 }
-
+const TOKEN_NAME = "x-access-token"
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
   name: "queries",
   fields: {
-    [GQL_NAMES.QUERY_MOVIES]: {
+    movies: {
       description: "Returns a list of Movies.",
       type: new GraphQLList(MovieType),
       args: {},
-      resolve: async (parent, args, ctx) => {
-        console.log(ctx.user, "CONTEXT")
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(context.headers[TOKEN_NAME], false)
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager()
           .getRepository(Movie)
           .find({
@@ -72,7 +85,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Quotes.",
       type: new GraphQLList(QuoteType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager().getRepository(Quote).find()
         return data
       },
@@ -82,7 +100,9 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Soundtracks.",
       type: new GraphQLList(SoundtrackType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(context.headers[TOKEN_NAME], false)
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager().getRepository(Soundtrack).find()
         return data
       },
@@ -91,7 +111,9 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Actors.",
       type: new GraphQLList(ActorType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(context.headers[TOKEN_NAME], false)
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager()
           .getRepository(Actor)
           .find({
@@ -105,7 +127,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Casts.",
       type: new GraphQLList(CastType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager()
           .getRepository(Cast)
           .find({
@@ -119,7 +146,7 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Reviews.",
       type: new GraphQLList(ReviewType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
         const data = await getManager()
           .getRepository(Review)
           .find({
@@ -133,7 +160,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Directors.",
       type: new GraphQLList(DirectorType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager().getRepository(Director).find()
         return data
       },
@@ -143,7 +175,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Countries.",
       type: new GraphQLList(CountryType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager().getRepository(Country).find()
         return data
       },
@@ -153,7 +190,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Users.",
       type: new GraphQLList(UserType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager()
           .getRepository(User)
           .find({ relations: ["movieWishList", "movieWatchedList"] })
@@ -165,7 +207,12 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns a list of Awards.",
       type: new GraphQLList(AwardType),
       args: {},
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const data = await getManager().getRepository(Award).find()
         return data
       },
@@ -183,7 +230,13 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: ReviewInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
+
         let record = new Review()
 
         let user = await getManager()
@@ -209,7 +262,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: QuoteInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Quote()
         const movie = await getManager()
           .getRepository(Movie)
@@ -232,7 +290,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: SoundtrackInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Soundtrack()
         const movie = await getManager()
           .getRepository(Movie)
@@ -256,7 +319,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: MovieInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Movie()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -274,7 +342,12 @@ const RootMutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLInt) },
         patch: { type: MoviePatchType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         let record = await getManager().getRepository(Movie).findOne(args.id)
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -291,7 +364,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: ActorInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         let record = new Actor()
         record.actorDob = args.patch.actorDob
         record.actorFirstName = args.patch.actorFirstName
@@ -321,7 +399,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: DirectorInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Director()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -338,7 +421,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: CountryInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Country()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -355,7 +443,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: CastInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         let movie = await getManager()
           .getRepository(Movie)
           .findOne(args.patch.movieId)
@@ -390,7 +483,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: UserInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new User()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -407,9 +505,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: UserLoggedInTry },
       },
-      resolve: async (parent, args) => {
-        console.log(args.patch)
-
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          false
+        )
+        if (authResult) return new GraphQLError(authResult)
         const repo = getManager().getRepository(User)
         const user = await repo.findOne({
           where: {
@@ -432,7 +533,7 @@ const RootMutation = new GraphQLObjectType({
             lastName: user.lastName,
           },
           "secret",
-          { expiresIn: 60 * 60 * 60 }
+          { expiresIn: 60 * 60 * 24 }
         )
         return {
           token,
@@ -447,7 +548,12 @@ const RootMutation = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLID) },
         patch: { type: UserPatchType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         let record = await getManager().getRepository(User).findOne(args.id)
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
@@ -465,7 +571,12 @@ const RootMutation = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLInt) },
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const user = await getManager().getRepository(User).findOne(args.userId)
         if (!user)
           throw new Error("Couldnt find user, please check the is correct.")
@@ -491,7 +602,12 @@ const RootMutation = new GraphQLObjectType({
         userId: { type: new GraphQLNonNull(GraphQLInt) },
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const user = await getManager().getRepository(User).findOne(args.userId)
         if (!user)
           throw new Error("Couldnt find user, please check the is correct.")
@@ -518,7 +634,12 @@ const RootMutation = new GraphQLObjectType({
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
         awardId: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const movie = await getManager()
           .getRepository(Movie)
           .findOne(args.movieId)
@@ -547,7 +668,12 @@ const RootMutation = new GraphQLObjectType({
         movieId: { type: new GraphQLNonNull(GraphQLInt) },
         directorId: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const movie = await getManager()
           .getRepository(Movie)
           .findOne(args.movieId)
@@ -574,7 +700,12 @@ const RootMutation = new GraphQLObjectType({
       args: {
         patch: { type: AwardInputType },
       },
-      resolve: async (parent, args) => {
+      resolve: async (parent, args, context) => {
+        const authResult = await handleAuth(
+          context.headers["x-access-token"],
+          true
+        )
+        if (authResult) return new GraphQLError(authResult)
         const record = new Award()
         Object.entries(args.patch).forEach((x) => {
           record[x[0]] = x[1]
