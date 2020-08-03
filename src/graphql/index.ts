@@ -11,14 +11,14 @@ import {
 import * as bcrypt from "bcrypt"
 import * as jwt from "jsonwebtoken"
 import { getManager, createQueryBuilder } from "typeorm"
-import { Movie } from "../entity/Movie"
+import { Movie } from "~/entity/Movie"
 import { MovieType, MovieInputType, MoviePatchType } from "./Movie"
 import { CountryType, CountryInputType } from "./Country"
-import { Country } from "../entity/Country"
+import { Country } from "~/entity/Country"
 import { DirectorType, DirectorInputType } from "./Director"
-import { Director } from "../entity/Director"
+import { Director } from "~/entity/Director"
 import { ActorType, ActorInputType } from "./Actor"
-import { Actor } from "../entity/Actor"
+import { Actor } from "~/entity/Actor"
 import {
   UserType,
   UserInputType,
@@ -26,33 +26,19 @@ import {
   UserLoggedInSuccess,
   UserLoggedInTry,
 } from "./User"
-import { User } from "../entity/User"
+import { User } from "~/entity/User"
 import { AwardType, AwardInputType } from "./Award"
-import { Award } from "../entity/Award"
+import { Award } from "~/entity/Award"
 import { ReviewType, ReviewInputType } from "./Review"
-import { Review } from "../entity/Review"
-import { Soundtrack } from "../entity/Soundtrack"
+import { Review } from "~/entity/Review"
+import { Soundtrack } from "~/entity/Soundtrack"
 import { SoundtrackType, SoundtrackInputType } from "./Soundtrack"
-import { Quote } from "../entity/Quote"
+import { Quote } from "~/entity/Quote"
 import { QuoteType, QuoteInputType } from "./Quote.ts"
 import { CastType, CastInputType } from "./Cast"
-import { Cast } from "../entity/Cast"
+import { Cast } from "~/entity/Cast"
+import { handleAuth } from "~/utils/auth"
 
-const handleAuth = async (
-  token: string | null | undefined,
-  routeRequiresAuth: boolean
-) => {
-  if (!routeRequiresAuth) return null
-  if (routeRequiresAuth && !token)
-    return "Missing token, send in 'x-access-token' header"
-  try {
-    const verify = await jwt.verify(token, "secret")
-    if (!verify) return "You are not authorized."
-    return null
-  } catch (e) {
-    return "You are not authorized"
-  }
-}
 const TOKEN_NAME = "x-access-token"
 const RootQuery = new GraphQLObjectType({
   description: "The root query.",
@@ -533,7 +519,7 @@ const RootMutation = new GraphQLObjectType({
             lastName: user.lastName,
           },
           "secret",
-          { expiresIn: 60 * 60 * 24 }
+          { expiresIn: 8 }
         )
         return {
           token,
