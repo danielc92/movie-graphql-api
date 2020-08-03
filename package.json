@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
-    "ts-node": "3.3.0",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^8.0.29",
+    "ts-node": "3.3.0",
     "typescript": "3.3.3333"
   },
   "dependencies": {
@@ -27,10 +28,10 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "prod": "nodemon build/index.js",
-    "db-kill": "docker kill pg-movies && docker rm pg-movies",
-    "db-start": "docker run --name pg-movies -p 5432:5432 -e POSTGRES_DB=movies -e POSTGRES_PASSWORD=secret -d postgres",
-    "db-restart": "docker restart pg-movies",
-    "db-console": "docker exec -it pg-movies psql -U postgres -d movies",
+    "db-kill": "docker kill pg-gql-movies && docker rm pg-gql-movies",
+    "db-start": "docker run --name pg-gql-movies -p 3020:5432 -e POSTGRES_DB=movies -e POSTGRES_PASSWORD=secret -d postgres",
+    "db-restart": "docker restart pg-gql-movies",
+    "db-console": "docker exec -it pg-gql-movies psql -U postgres -d movies",
     "codegen": "get-graphql-schema http://localhost:3040/graphql > schema.graphql"
   }
 }
