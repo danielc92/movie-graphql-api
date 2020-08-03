@@ -6,6 +6,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^8.0.29",
     "ts-node": "3.3.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "3.3.3333"
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "typeorm": "0.2.25"
   },
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
     "prod": "nodemon build/index.js",
     "db-kill": "docker kill pg-gql-movies && docker rm pg-gql-movies",
