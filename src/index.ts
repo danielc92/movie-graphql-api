@@ -1,3 +1,4 @@
+require("dotenv").config()
 import "reflect-metadata"
 import { createConnection } from "typeorm"
 import express, { Request, Response, NextFunction } from "express"
@@ -11,7 +12,7 @@ createConnection()
     const app = express()
     app.use(cors())
     app.use(helmet())
-
+    console.log(process.env, "ENV")
     app.use(
       "/graphql",
       graphqlHTTP({
@@ -19,6 +20,8 @@ createConnection()
         graphiql: true,
       })
     )
-    app.listen(3040, () => console.log("Listening on port 3040"))
+    app.listen(process.env.PORT, () =>
+      console.log(`Listening on port ${process.env.PORT}`)
+    )
   })
   .catch((error) => console.log(error))
