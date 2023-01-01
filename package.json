@@ -6,7 +6,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^8.0.29",
     "ts-node": "3.3.0",
-    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths": "^3.10.1",
     "typescript": "3.3.3333"
   },
   "dependencies": {
